@@ -5,6 +5,8 @@ import axios from 'axios';
 function App() {
   // キャラクター情報を格納
   const [characters, setCharacters] = useState([]);
+  // ページ番号を格納
+  const [page, setPage] = useState(1);
   // ローディング管理
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,6 +31,19 @@ function App() {
     setIsLoading(false);
   };
 
+  // ページ遷移 次のページ
+  const handleNext = async () => {
+    const nextPage = page + 1;
+    await fetchCharacters(nextPage);
+    setPage(nextPage);
+  };
+
+  // ページ遷移 前のページ
+  const handlePrev = async () => {
+    const prevPage = page - 1;
+    await fetchCharacters(prevPage);
+    setPage(prevPage);
+  };
 
   return (
     <>
@@ -65,12 +80,25 @@ function App() {
                   </div>
                 );
               })}
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+            </div>
+            <div className="pager">
+              <button
+                className="prev"
+                onClick={handlePrev}
+                type="button"
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              <span className="page-number">{page}</span>
+              <button
+                className="next"
+                onClick={handleNext}
+                type="button"
+                disabled={limit > characters.length}
+              >
+                Next
+              </button>
             </div>
           </main>
         )}
